@@ -2,7 +2,8 @@ import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { mockApiRequest } from "@/utilits/mock";
+import { mockApiRequest } from "@/mockForTests/mockApiRequest";
+import { API_ROUTE } from "../../../../../API_ROUTE";
 
 const handler = NextAuth({
   providers: [
@@ -21,7 +22,7 @@ const handler = NextAuth({
           return null;
         }
 
-        const res = await mockApiRequest("/v1/auth/login", {
+        const res = await fetch(`${API_ROUTE}/v1/auth/login`, {
           method: "POST",
           body: JSON.stringify(credentials),
           headers: {
@@ -30,7 +31,7 @@ const handler = NextAuth({
           },
         });
 
-        if (res.error) {
+        if (!res.ok) {
           return null;
         }
 

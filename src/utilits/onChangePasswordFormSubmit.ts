@@ -42,7 +42,7 @@ export const onFormSubmit = async ({
     return;
   }
 
-  if (findUserPassword(password)) {
+  if (await findUserPassword(password)) {
     setError("password is equal to the current");
     return;
   }

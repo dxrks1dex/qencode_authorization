@@ -1,5 +1,6 @@
 import { signIn } from "next-auth/react";
-import { mockApiRequest } from "@/utilits/mock";
+import { mockApiRequest } from "@/mockForTests/mockApiRequest";
+import { API_ROUTE } from "../../API_ROUTE";
 
 interface AuthorizationProps {
   email: string;
@@ -21,7 +22,7 @@ export const authorizationOptions = async ({
   password,
 }: AuthorizationProps) => {
   try {
-    const userRes = await mockApiRequest("/v1/auth/login", {
+    const userRes = await fetch(`${API_ROUTE}/v1/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -31,8 +32,8 @@ export const authorizationOptions = async ({
         password: password,
       }),
     });
-    if (userRes.error) {
-      throw new Error(String(userRes.error));
+    if (!userRes.ok) {
+      throw new Error(userRes.status.toString());
     }
 
     const result = await signIn("credentials", {
@@ -64,7 +65,7 @@ export const changePassword = async ({
   }
 
   try {
-    const response = await mockApiRequest("v1/auth/password-set", {
+    const response = await fetch(`${API_ROUTE}/v1/auth/password-set`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -77,8 +78,8 @@ export const changePassword = async ({
       }),
     });
 
-    if (response.error) {
-      throw new Error(response.error.toString());
+    if (!response.ok) {
+      throw new Error(response.status.toString());
     }
 
     return response;
@@ -95,7 +96,7 @@ export const resetPassword = async ({ email }: ResetPasswordProps) => {
   }
 
   try {
-    const response = await mockApiRequest("/v1/auth/password-reset", {
+    const response = await fetch(`${API_ROUTE}/v1/auth/password-reset`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -106,8 +107,8 @@ export const resetPassword = async ({ email }: ResetPasswordProps) => {
       }),
     });
 
-    if (response.error) {
-      throw new Error(response.error.toString());
+    if (!response.ok) {
+      throw new Error(response.status.toString());
     }
 
     return response;

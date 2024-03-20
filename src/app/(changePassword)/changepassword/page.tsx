@@ -14,6 +14,7 @@ import {
   getUserDataByEmail,
 } from "@/utilits/findUserByCredentials";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const ChangePasswordForm = () => {
   const {
@@ -23,13 +24,23 @@ const ChangePasswordForm = () => {
 
   const router = useRouter();
 
-  const onPasswordChangeRequest = () => {
-    if (findUserByEmail({ body: { email } })) {
-      router.push(
-        `/confirm-new-password?token=${getUserDataByEmail(email)?.token}&secret=${getUserDataByEmail(email)?.secret}`,
-      );
-    } else {
-      console.log("email not found");
+  const onPasswordChangeRequest = async () => {
+    try {
+      const userExists = await findUserByEmail(email);
+      if (userExists) {
+        const userData = await getUserDataByEmail(email);
+        if (userData) {
+          router.push(
+            `/confirm-new-password?token=${userData.token}&secret=${userData.secret}`,
+          );
+        } else {
+          console.log("User data not found");
+        }
+      } else {
+        console.log("User not found");
+      }
+    } catch (error) {
+      console.error("Error:", error);
     }
   };
 

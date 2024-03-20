@@ -1,5 +1,5 @@
 import { findUserByCredentials } from "@/utilits/findUserByCredentials";
-import { defaultCredentials } from "@/data/userData";
+import { defaultCredentials } from "@/mockForTests/testDataForMock/userData";
 
 interface MockApiRequestData {
   method: string;
@@ -18,7 +18,11 @@ export async function mockApiRequest(
     case "/v1/auth/login":
       const body = JSON.parse(data.body);
 
-      const user = findUserByCredentials({ body });
+      const user = findUserByCredentials({
+        //body
+        email: body.email,
+        password: body.password,
+      });
 
       if (!user) {
         return { error: "Invalid email or password" };
