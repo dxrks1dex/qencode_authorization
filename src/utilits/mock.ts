@@ -35,12 +35,19 @@ export async function mockApiRequest(
     case "/v1/auth/access-token":
       return { status: 200 };
     case "/v1/auth/password-reset":
-      return {
-        error: 0,
-        detail:
-          "Please check your email to complete the password reset process.",
-      };
-    case "/v1/auth/change-password":
+      const resetPasswordData = JSON.parse(data.body);
+      const userEmail = resetPasswordData.email;
+
+      if (!userEmail) {
+        return { error: "No email" };
+      } else {
+        return {
+          error: 0,
+          detail:
+            "Please check your email to complete the password reset process.",
+        };
+      }
+    case "v1/auth/password-set":
       const changePasswordData = JSON.parse(data.body);
       const userToken = changePasswordData.token;
       const newPassword = changePasswordData.newPassword;

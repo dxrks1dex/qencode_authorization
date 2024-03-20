@@ -1,6 +1,6 @@
 import { Dispatch, FormEvent, SetStateAction } from "react";
 import { findUserPassword } from "@/utilits/findUserByCredentials";
-import { changePassword } from "@/utilits/authorization";
+import { changePassword, resetPassword } from "@/utilits/authorizationOptions";
 
 interface Props {
   e: FormEvent;
@@ -8,6 +8,7 @@ interface Props {
   checkNewPassword: string;
   token: string | null;
   secret: string | null;
+  email: string;
 
   setError: Dispatch<SetStateAction<string>>;
   setPassword: Dispatch<SetStateAction<string>>;
@@ -23,6 +24,7 @@ export const onFormSubmit = async ({
   setError,
   token,
   secret,
+  email,
 }: Props) => {
   e.preventDefault();
 
@@ -51,6 +53,7 @@ export const onFormSubmit = async ({
   }
 
   try {
+    await resetPassword({ email });
     await changePassword({ secret, token, newPassword: password });
 
     setPassword("");

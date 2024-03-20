@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { authorization } from "@/utilits/authorization";
+import { authorizationOptions } from "@/utilits/authorizationOptions";
 
 interface Props {
   password: string;
@@ -18,5 +18,5 @@ export const onAuthorizationFormSubmit = ({
   }
 
   setError("");
-  authorization({ email, password });
+  authorizationOptions({ email, password });
 };

@@ -12,7 +12,11 @@ interface ChangePasswordProps {
   secret: string | null;
 }
 
-export const authorization = async ({
+interface ResetPasswordProps {
+  email: string;
+}
+
+export const authorizationOptions = async ({
   email,
   password,
 }: AuthorizationProps) => {
@@ -60,7 +64,7 @@ export const changePassword = async ({
   }
 
   try {
-    const response = await mockApiRequest("/v1/auth/change-password", {
+    const response = await mockApiRequest("v1/auth/password-set", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -80,6 +84,35 @@ export const changePassword = async ({
     return response;
   } catch (error: any) {
     console.error("Failed to change password:", error.message);
+    throw error;
+  }
+};
+
+export const resetPassword = async ({ email }: ResetPasswordProps) => {
+  if (!email) {
+    console.log("no email");
+    return { error: "Missing email!" };
+  }
+
+  try {
+    const response = await mockApiRequest("/v1/auth/password-reset", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${email}`,
+      },
+      body: JSON.stringify({
+        email: email,
+      }),
+    });
+
+    if (response.error) {
+      throw new Error(response.error.toString());
+    }
+
+    return response;
+  } catch (error: any) {
+    console.error("Failed to connect email:", error.message);
     throw error;
   }
 };

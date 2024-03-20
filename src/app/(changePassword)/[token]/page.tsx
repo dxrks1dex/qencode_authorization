@@ -13,6 +13,7 @@ import { useSearchParams } from "next/navigation";
 import { onFormSubmit } from "@/utilits/onChangePasswordFormSubmit";
 import { EyeIcon } from "../../../../img/EyeIcon";
 import { onShowPassword } from "@/utilits/onShowPassword";
+import { useAuthenticatorContext } from "@/hooks/useAuthenticatorContext";
 
 const ConfirmNewPassword = () => {
   const [password, setPassword] = useState("");
@@ -22,6 +23,10 @@ const ConfirmNewPassword = () => {
     newPassword: false,
     confirmNewPassword: false,
   });
+
+  const {
+    data: { email },
+  } = useAuthenticatorContext();
 
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
@@ -41,6 +46,7 @@ const ConfirmNewPassword = () => {
             secret,
             setError,
             token,
+            email,
           })
         }
       >
