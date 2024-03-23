@@ -37,12 +37,12 @@ const ChangePasswordForm = () => {
   };
 
   const onCancelClick = () => {
+    setEmail("");
+    setPassword("");
+
     window.history.replaceState(null, "", "/");
 
     router.back();
-
-    setEmail("");
-    setPassword("");
   };
 
   return (
