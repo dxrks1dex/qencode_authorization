@@ -40,7 +40,7 @@ const ChangePasswordForm = () => {
     setEmail("");
     setPassword("");
 
-    window.history.replaceState(null, "", "/");
+    // window.history.replaceState(null, "", "/");
 
     router.back();
   };
