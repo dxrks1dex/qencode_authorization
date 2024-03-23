@@ -22,7 +22,7 @@ const ChangePasswordForm = () => {
 
   const {
     data: { email, errorMessage, isLoading },
-    operations: { setEmail, setErrorMessage, setIsLoading },
+    operations: { setEmail, setPassword, setErrorMessage, setIsLoading },
   } = useAuthenticatorContext();
 
   const onFormSubmit = async (e: SyntheticEvent) => {
@@ -40,6 +40,9 @@ const ChangePasswordForm = () => {
     window.history.replaceState(null, "", "/");
 
     router.back();
+
+    setEmail("");
+    setPassword("");
   };
 
   return (
