@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import Providers from "@/components/Providers";
 import StyledComponentsRegistry from "../lib/registry";
 import styled from "styled-components";
-import { AuthenticatorContextWrapper } from "@/hooks/useAuthenticatorContext";
+import { AuthenticatorContextWrapper } from "@/hooks/AuthenticatorContext";
 
 const inter = Inter({ subsets: ["latin"] });
 

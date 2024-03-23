@@ -1,9 +1,9 @@
 "use client";
 import { AuthorizationForm } from "@/components/LoginForm/AuthorizationForm";
 import {
-  StyledButtons,
+  Button,
   StyledLink,
-  StyledSubTitle,
+  SubTitle,
 } from "@/components/styled/styled-components";
 import { signIn, signOut, useSession } from "next-auth/react";
 import googleLogo from "../../img/google.svg";
@@ -25,7 +25,7 @@ export const Login = () => {
 
   return (
     <div>
-      <StyledSubTitle>Log in to your account</StyledSubTitle>
+      <SubTitle>Log in to your account</SubTitle>
       <StyledButtonContainer>
         <StyledLinkButtons
           onClick={() => signIn("google", { redirect: false })}
@@ -54,7 +54,7 @@ export const Login = () => {
   );
 };
 
-const StyledLinkButtons = styled(StyledButtons)`
+const StyledLinkButtons = styled(Button)`
   width: 192px;
   height: 48px;
 

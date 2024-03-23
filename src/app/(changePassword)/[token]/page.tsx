@@ -1,60 +1,74 @@
 "use client";
 import {
-  StyledApplyButton,
+  ApplyButton,
   StyledForm,
-  StyledInput,
-  StyledPasswordInputContainer,
-  StyledShowPasswordIconContainer,
-  StyledSubTitle,
+  FormInput,
+  InputContainer,
+  IconContainer,
+  SubTitle,
+  ErrorMessage,
+  SuccessMessage,
+  DiagonalLine,
 } from "@/components/styled/styled-components";
-import { useRef, useState } from "react";
+import { Dispatch, SetStateAction, SyntheticEvent, useState } from "react";
 import styled from "styled-components";
-import { useSearchParams } from "next/navigation";
-import { onFormSubmit } from "@/utilits/onChangePasswordFormSubmit";
+import { useRouter, useSearchParams } from "next/navigation";
+import { onChangePassword } from "@/utilits/onChangePasswordFormSubmit";
 import { EyeIcon } from "../../../../img/EyeIcon";
-import { onShowPassword } from "@/utilits/onShowPassword";
-import { useAuthenticatorContext } from "@/hooks/useAuthenticatorContext";
+import { useAuthenticatorContext } from "@/hooks/AuthenticatorContext";
+
+interface onShowPasswordProps {
+  field: "newPassword" | "confirmNewPassword";
+  setShowPassword: Dispatch<
+    SetStateAction<{ newPassword: boolean; confirmNewPassword: boolean }>
+  >;
+}
 
 const ConfirmNewPassword = () => {
   const [password, setPassword] = useState("");
   const [checkNewPassword, setCheckNewPassword] = useState("");
-  const [error, setError] = useState("");
-  const [showPassword, setShowPassword] = useState({
-    newPassword: false,
-    confirmNewPassword: false,
-  });
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isChangedPasswordVisible, setIsChangedPasswordVisible] =
+    useState(false);
+  const [changeSuccess, setChangeSuccess] = useState(false);
+
+  const router = useRouter();
 
   const {
-    data: { email },
+    data: { errorMessage, isLoading },
+    operations: { setErrorMessage, setIsLoading },
   } = useAuthenticatorContext();
 
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
   const secret = searchParams.get("secret");
 
+  const onFormSubmit = async (e: SyntheticEvent) => {
+    e.preventDefault();
+
+    await onChangePassword({
+      e,
+      password: password,
+      checkNewPassword,
+      secret,
+      setErrorMessage,
+      token,
+      setChangeSuccess,
+      router,
+      setIsLoading,
+    });
+  };
+
   return (
     <div>
-      <StyledSubTitle>Create new Password?</StyledSubTitle>
-      <StyledForm
-        onSubmit={(e) =>
-          onFormSubmit({
-            e,
-            password,
-            setPassword,
-            setCheckNewPassword,
-            checkNewPassword,
-            secret,
-            setError,
-            token,
-            email,
-          })
-        }
-      >
+      <SubTitle>Create new Password?</SubTitle>
+      <StyledForm onSubmit={(e) => onFormSubmit(e)}>
         <div>
           <StyledInputName>Password</StyledInputName>
-          <StyledPasswordInputContainer>
-            <StyledInput
-              type={showPassword.newPassword ? "text" : "password"}
+          <InputContainer>
+            <FormInput
+              disabled={isLoading}
+              type={isPasswordVisible ? "text" : "password"}
               id="newPassword"
               name="newPassword"
               required
@@ -62,20 +76,20 @@ const ConfirmNewPassword = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <StyledShowPasswordIconContainer
-              onClick={() =>
-                onShowPassword({ field: "newPassword", setShowPassword })
-              }
+            <IconContainer
+              onClick={() => setIsPasswordVisible((prevState) => !prevState)}
             >
+              {isPasswordVisible ? <DiagonalLine /> : null}
               <EyeIcon />
-            </StyledShowPasswordIconContainer>
-          </StyledPasswordInputContainer>
+            </IconContainer>
+          </InputContainer>
         </div>
         <div>
           <StyledInputName>Confirm Password</StyledInputName>
-          <StyledPasswordInputContainer>
-            <StyledInput
-              type={showPassword.confirmNewPassword ? "text" : "password"}
+          <InputContainer>
+            <FormInput
+              disabled={isLoading}
+              type={isChangedPasswordVisible ? "text" : "password"}
               id="confirmNewPassword"
               name="confirmNewPassword"
               required
@@ -83,17 +97,23 @@ const ConfirmNewPassword = () => {
               value={checkNewPassword}
               onChange={(e) => setCheckNewPassword(e.target.value)}
             />
-            <StyledShowPasswordIconContainer
+            <IconContainer
               onClick={() =>
-                onShowPassword({ field: "confirmNewPassword", setShowPassword })
+                setIsChangedPasswordVisible((prevState) => !prevState)
               }
             >
+              {isChangedPasswordVisible ? <DiagonalLine /> : null}
               <EyeIcon />
-            </StyledShowPasswordIconContainer>
-          </StyledPasswordInputContainer>
+            </IconContainer>
+          </InputContainer>
         </div>
-        {error && <ErrorMessage>{error}</ErrorMessage>}
-        <StyledApplyButton type="submit">Reset Password</StyledApplyButton>
+        {errorMessage === "" ? null : (
+          <ErrorMessage>{errorMessage}</ErrorMessage>
+        )}
+        {changeSuccess && <SuccessMessage>Password changed</SuccessMessage>}
+        <ApplyButton type="submit" disabled={isLoading}>
+          {isLoading ? "Loading..." : "Reset Password"}
+        </ApplyButton>
       </StyledForm>
     </div>
   );
@@ -108,10 +128,4 @@ const StyledInputName = styled.span`
   line-height: 21px;
   letter-spacing: -0.0024em;
   text-align: left;
-`;
-
-const ErrorMessage = styled.div`
-  color: red;
-  font-size: 14px;
-  margin-top: 5px;
 `;

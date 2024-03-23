@@ -1,24 +1,26 @@
 import { ChangeEvent, SyntheticEvent, useState } from "react";
 import { onAuthorizationFormSubmit } from "@/utilits/onAuthorizationFormSubmit";
-import { useAuthenticatorContext } from "@/hooks/useAuthenticatorContext";
+import { useAuthenticatorContext } from "@/hooks/AuthenticatorContext";
 import {
   StyledForm,
-  StyledInput,
+  FormInput,
   StyledLink,
-  StyledApplyButton,
-  StyledPasswordInputContainer,
-  StyledShowPasswordIconContainer,
+  ApplyButton,
+  InputContainer,
+  IconContainer,
+  ErrorMessage,
+  DiagonalLine,
 } from "@/components/styled/styled-components";
 import { EyeIcon } from "../../../img/EyeIcon";
+import styled from "styled-components";
 
 export const AuthorizationForm = () => {
-  const [error, setError] = useState("");
   const [showPasswordInput, setShowPasswordInput] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const {
-    data: { email, password },
-    operations: { setPassword, setEmail },
+    data: { email, password, errorMessage, isLoading },
+    operations: { setPassword, setEmail, setErrorMessage, setIsLoading },
   } = useAuthenticatorContext();
 
   const checkEmail = (e: ChangeEvent<HTMLInputElement>) => {
@@ -29,15 +31,21 @@ export const AuthorizationForm = () => {
     setShowPasswordInput(isValidEmail);
   };
 
+  const onFormSubmit = async (e: SyntheticEvent) => {
+    e.preventDefault();
+
+    await onAuthorizationFormSubmit({
+      email,
+      password,
+      setErrorMessage,
+      setIsLoading,
+    });
+  };
+
   return (
     <div>
-      <StyledForm
-        onSubmit={(e: SyntheticEvent) => {
-          e.preventDefault();
-          onAuthorizationFormSubmit({ email, password, setError });
-        }}
-      >
-        <StyledInput
+      <StyledForm onSubmit={(e: SyntheticEvent) => onFormSubmit(e)}>
+        <FormInput
           type="email"
           id="email"
           name="email"
@@ -48,8 +56,8 @@ export const AuthorizationForm = () => {
 
         {showPasswordInput && (
           <>
-            <StyledPasswordInputContainer>
-              <StyledInput
+            <InputContainer>
+              <FormInput
                 type={showPassword ? "text" : "password"}
                 id="password"
                 name="password"
@@ -57,21 +65,34 @@ export const AuthorizationForm = () => {
                 required
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <StyledShowPasswordIconContainer
+              <IconContainer
                 onClick={() => setShowPassword((prevState) => !prevState)}
               >
+                {showPassword ? <DiagonalLine /> : null}
                 <EyeIcon />
-              </StyledShowPasswordIconContainer>
-            </StyledPasswordInputContainer>
-
-            <StyledLink href={`/changepassword`}>
-              Forgot your password?
-            </StyledLink>
+              </IconContainer>
+            </InputContainer>
+            <StyledLinkContainer>
+              <StyledLink href={`/changepassword`}>
+                Forgot your password?
+              </StyledLink>
+              {errorMessage === "" ? null : (
+                <ErrorMessage>{errorMessage}</ErrorMessage>
+              )}
+            </StyledLinkContainer>
           </>
         )}
-        {error && <p>{error}</p>}
-        <StyledApplyButton type="submit">Log in to Qencode</StyledApplyButton>
+
+        <ApplyButton type="submit" disabled={isLoading}>
+          {isLoading ? "Loading..." : "Log in to Qencode"}
+        </ApplyButton>
       </StyledForm>
     </div>
   );
 };
+
+const StyledLinkContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row-reverse;
+`;

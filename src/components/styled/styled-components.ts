@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Link from "next/link";
 
-export const StyledInput = styled.input`
+export const FormInput = styled.input`
   width: 376px;
   height: 48px;
 
@@ -38,7 +38,7 @@ export const StyledForm = styled.form`
   grid-gap: 30px;
 `;
 
-export const StyledApplyButton = styled.button`
+export const ApplyButton = styled.button`
   width: 400px;
   height: 48px;
 
@@ -61,7 +61,7 @@ export const StyledApplyButton = styled.button`
   cursor: pointer;
 `;
 
-export const StyledSubTitle = styled.h3`
+export const SubTitle = styled.h3`
   font-size: 30px;
   font-weight: 700;
   line-height: 39px;
@@ -85,7 +85,7 @@ export const StyledLink = styled(Link)`
   text-decoration: none;
 `;
 
-export const StyledButtons = styled.button`
+export const Button = styled.button`
   border-radius: 5px;
 
   border: 1px solid #d3d8dc;
@@ -107,14 +107,44 @@ export const StyledButtons = styled.button`
   }
 `;
 
-export const StyledPasswordInputContainer = styled.div`
+export const InputContainer = styled.div`
   display: flex;
 
   align-items: center;
 `;
 
-export const StyledShowPasswordIconContainer = styled.div`
+export const IconContainer = styled.div`
   position: absolute;
 
   margin-left: 92%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+`;
+
+export const ErrorMessage = styled.div`
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
+`;
+
+export const SuccessMessage = styled.div`
+  color: green;
+  font-size: 14px;
+  margin-top: 5px;
+`;
+
+export const DiagonalLine = styled.div`
+  position: absolute;
+
+  width: 100%;
+  height: 1.5px;
+
+  transform: rotate(-45deg);
+
+  background-color: #67717b;
 `;

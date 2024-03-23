@@ -8,45 +8,48 @@ import {
   useMemo,
   useState,
 } from "react";
-import { bold } from "next/dist/lib/picocolors";
 
 interface IAuthenticatorContext {
   data: {
     email: string;
     password: string;
+    errorMessage: string;
+    isLoading: boolean;
   };
   operations: {
     setEmail: Dispatch<SetStateAction<string>>;
     setPassword: Dispatch<SetStateAction<string>>;
+    setErrorMessage: Dispatch<SetStateAction<string>>;
+    setIsLoading: Dispatch<SetStateAction<boolean>>;
   };
 }
 
-const UseAuthenticatorContext = createContext<IAuthenticatorContext | null>(
-  null,
-);
+const AuthenticatorContext = createContext<IAuthenticatorContext | null>(null);
 export const AuthenticatorContextWrapper: FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const context: IAuthenticatorContext = useMemo(
     () => ({
-      data: { email, password },
-      operations: { setEmail, setPassword },
+      data: { email, password, errorMessage, isLoading },
+      operations: { setEmail, setPassword, setErrorMessage, setIsLoading },
     }),
-    [email, password],
+    [email, errorMessage, isLoading, password],
   );
 
   return (
-    <UseAuthenticatorContext.Provider value={context}>
+    <AuthenticatorContext.Provider value={context}>
       {children}
-    </UseAuthenticatorContext.Provider>
+    </AuthenticatorContext.Provider>
   );
 };
 
 export const useAuthenticatorContext = (): IAuthenticatorContext => {
-  const value = useContext(UseAuthenticatorContext);
+  const value = useContext(AuthenticatorContext);
   if (value === null) {
     throw new Error("empty UseTodoContext");
   }

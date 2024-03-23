@@ -4,19 +4,21 @@ import { authorizationOptions } from "@/utilits/authorizationOptions";
 interface Props {
   password: string;
   email: string;
-  setError: Dispatch<SetStateAction<string>>;
+  setErrorMessage: Dispatch<SetStateAction<string>>;
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
 }
 
 export const onAuthorizationFormSubmit = ({
-  setError,
+  setErrorMessage,
   email,
   password,
+  setIsLoading,
 }: Props) => {
   if (password.length < 5) {
-    setError("Password is too short");
+    setErrorMessage("Password is too short");
     return;
   }
 
-  setError("");
-  authorizationOptions({ email, password });
+  setErrorMessage("");
+  authorizationOptions({ email, password, setErrorMessage, setIsLoading });
 };

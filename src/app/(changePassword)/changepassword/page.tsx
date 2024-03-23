@@ -1,59 +1,57 @@
 "use client";
 import {
-  StyledInput,
-  StyledApplyButton,
-  StyledSubTitle,
-  StyledButtons,
+  FormInput,
+  ApplyButton,
+  SubTitle,
+  Button,
   StyledForm,
+  ErrorMessage,
+  StyledLink,
+  SuccessMessage,
 } from "@/components/styled/styled-components";
 import styled from "styled-components";
-import Link from "next/link";
-import { useAuthenticatorContext } from "@/hooks/useAuthenticatorContext";
-import {
-  findUserByEmail,
-  getUserDataByEmail,
-} from "@/utilits/findUserByCredentials";
+import { useAuthenticatorContext } from "@/hooks/AuthenticatorContext";
+import { resetPassword } from "@/utilits/authorizationOptions";
+import { SyntheticEvent, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 const ChangePasswordForm = () => {
-  const {
-    data: { email },
-    operations: { setEmail },
-  } = useAuthenticatorContext();
+  const [onEmailSend, setOnEmailSend] = useState(false);
 
   const router = useRouter();
 
-  const onPasswordChangeRequest = async () => {
-    try {
-      const userExists = await findUserByEmail(email);
-      if (userExists) {
-        const userData = await getUserDataByEmail(email);
-        if (userData) {
-          router.push(
-            `/confirm-new-password?token=${userData.token}&secret=${userData.secret}`,
-          );
-        } else {
-          console.log("User data not found");
-        }
-      } else {
-        console.log("User not found");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
+  const {
+    data: { email, errorMessage, isLoading },
+    operations: { setEmail, setErrorMessage, setIsLoading },
+  } = useAuthenticatorContext();
+
+  const onFormSubmit = async (e: SyntheticEvent) => {
+    e.preventDefault();
+
+    await resetPassword({
+      setIsLoading,
+      email,
+      setErrorMessage,
+      setOnEmailSend,
+    });
+  };
+
+  const onCancelClick = () => {
+    window.history.replaceState(null, "", "/");
+
+    router.back();
   };
 
   return (
     <div>
-      <StyledSubTitle>Forgot Password?</StyledSubTitle>
+      <SubTitle>Forgot Password?</SubTitle>
       <StyledForm
         onSubmit={(e) => {
           e.preventDefault();
-          onPasswordChangeRequest();
+          onFormSubmit(e);
         }}
       >
-        <StyledInput
+        <FormInput
           type="email"
           id="email"
           name="email"
@@ -61,18 +59,28 @@ const ChangePasswordForm = () => {
           placeholder="Enter your email"
           onChange={(e) => setEmail(e.target.value)}
         />
-        <StyledApplyButton>Send</StyledApplyButton>
+        {errorMessage === "" ? null : (
+          <ErrorMessage>{errorMessage}</ErrorMessage>
+        )}
+        {onEmailSend && (
+          <SuccessMessage>
+            Check email and follow the link in message
+          </SuccessMessage>
+        )}
+        <ApplyButton disabled={isLoading}>
+          {isLoading ? "Loading..." : "Send"}
+        </ApplyButton>
       </StyledForm>
-      <Link href="/">
-        <StyledCancelButton>Cancel</StyledCancelButton>
-      </Link>
+      <StyledCancelButton disabled={isLoading} onClick={onCancelClick}>
+        Cancel
+      </StyledCancelButton>
     </div>
   );
 };
 
 export default ChangePasswordForm;
 
-const StyledCancelButton = styled(StyledButtons)`
+const StyledCancelButton = styled(Button)`
   width: 400px;
   height: 48px;
 

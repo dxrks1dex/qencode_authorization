@@ -1,6 +1,6 @@
 import { Dispatch, FormEvent, SetStateAction } from "react";
-import { findUserPassword } from "@/utilits/findUserByCredentials";
-import { changePassword, resetPassword } from "@/utilits/authorizationOptions";
+import { changePassword } from "@/utilits/authorizationOptions";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 interface Props {
   e: FormEvent;
@@ -8,28 +8,29 @@ interface Props {
   checkNewPassword: string;
   token: string | null;
   secret: string | null;
-  email: string;
 
-  setError: Dispatch<SetStateAction<string>>;
-  setPassword: Dispatch<SetStateAction<string>>;
-  setCheckNewPassword: Dispatch<SetStateAction<string>>;
+  router: AppRouterInstance;
+
+  setErrorMessage: Dispatch<SetStateAction<string>>;
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setChangeSuccess: Dispatch<SetStateAction<boolean>>;
 }
 
-export const onFormSubmit = async ({
+export const onChangePassword = async ({
   e,
-  setCheckNewPassword,
   checkNewPassword,
-  setPassword,
   password,
-  setError,
+  setErrorMessage,
   token,
   secret,
-  email,
+  setChangeSuccess,
+  router,
+  setIsLoading,
 }: Props) => {
   e.preventDefault();
 
   if (password.length < 5) {
-    setError("Passwords is to short");
+    setErrorMessage("Passwords is to short");
     return;
   }
 
@@ -37,29 +38,23 @@ export const onFormSubmit = async ({
     return { error: "New password is too long!" };
   }
 
-  if (password.includes(" ")) {
-    setError("Uncorrected password");
-    return;
-  }
-
-  if (await findUserPassword(password)) {
-    setError("password is equal to the current");
-    return;
-  }
-
   if (password !== checkNewPassword) {
-    setError("Passwords do not match");
+    setErrorMessage("Passwords do not match");
     return;
   }
 
   try {
-    await resetPassword({ email });
-    await changePassword({ secret, token, newPassword: password });
-
-    setPassword("");
-    setCheckNewPassword("");
-    setError("");
+    await changePassword({
+      secret,
+      token,
+      newPassword: password,
+      checkNewPassword,
+      setErrorMessage,
+      setChangeSuccess,
+      router,
+      setIsLoading,
+    });
   } catch (error: any) {
-    setError(error.message);
+    setErrorMessage(error.message);
   }
 };

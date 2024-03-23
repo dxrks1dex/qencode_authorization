@@ -1,4 +1,4 @@
-import { findUserByCredentials } from "@/utilits/findUserByCredentials";
+import { findUserByCredentials } from "@/mockForTests/utilits/findUserByCredentials";
 import { defaultCredentials } from "@/mockForTests/testDataForMock/userData";
 
 interface MockApiRequestData {
