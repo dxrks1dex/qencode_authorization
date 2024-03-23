@@ -128,9 +128,7 @@ export const changePassword = async ({
     setChangeSuccess(true);
     setErrorMessage("");
 
-    router.push(
-      "https://65fb1069860b04008db1559c--qencodeloginui.netlify.app/",
-    );
+    router.push("https://main--qencodeloginui.netlify.app/changepassword");
 
     return response;
   } catch (error: any) {
@@ -172,7 +170,7 @@ export const resetPassword = async ({
       },
       body: JSON.stringify({
         email: email,
-        url: `https://65fb1069860b04008db1559c--qencodeloginui.netlify.app/confirm-new-password`,
+        url: `https://main--qencodeloginui.netlify.app/confirm-new-password`,
       }),
     });
 
@@ -189,6 +187,8 @@ export const resetPassword = async ({
   } catch (error: any) {
     if (error.message === "429") {
       setErrorMessage("Too many requests. Please try again later.");
+    } else if (error.message === "401") {
+      setErrorMessage("Email doesn't exist.");
     } else {
       setErrorMessage("Failed to connect email. Please try later.");
     }
