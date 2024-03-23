@@ -12,11 +12,8 @@ const handler = NextAuth({
       credentials: {
         email: { label: "email", type: "email", required: true },
         password: { label: "password", type: "password", required: true },
-        token: { type: "string", required: true },
-        id: { type: "string" },
-        secret: { type: "string", required: true },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         if (!credentials?.email || !credentials.password) {
           return null;
         }
@@ -26,7 +23,6 @@ const handler = NextAuth({
           body: JSON.stringify(credentials),
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${credentials.token}`,
           },
         });
 
@@ -34,7 +30,13 @@ const handler = NextAuth({
           return null;
         }
 
-        return credentials;
+        const userData = await res.json();
+        const user = {
+          id: userData.id,
+          email: credentials.email,
+        };
+
+        return user;
       },
     }),
     GoogleProvider({

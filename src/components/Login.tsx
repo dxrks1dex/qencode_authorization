@@ -15,10 +15,11 @@ export const Login = () => {
   const { data: session } = useSession();
 
   if (session && session.user) {
+    console.log(session.user.email);
     return (
       <div>
-        <p>{session.user.email}</p>
-        <button onClick={() => signOut()}>Sign Out</button>
+        <p>Email: {session.user.email}</p>
+        <StyledLinkButton onClick={() => signOut()}>Sign Out</StyledLinkButton>
       </div>
     );
   }
@@ -27,18 +28,14 @@ export const Login = () => {
     <div>
       <SubTitle>Log in to your account</SubTitle>
       <StyledButtonContainer>
-        <StyledLinkButtons
-          onClick={() => signIn("google", { redirect: false })}
-        >
+        <StyledLinkButton onClick={() => signIn("google", { redirect: false })}>
           <StyledIcon src={googleLogo} alt="Google Logo" />
           Google
-        </StyledLinkButtons>
-        <StyledLinkButtons
-          onClick={() => signIn("github", { redirect: false })}
-        >
+        </StyledLinkButton>
+        <StyledLinkButton onClick={() => signIn("github", { redirect: false })}>
           <StyledIcon src={github} alt="Git Logo" />
           GitHub
-        </StyledLinkButtons>
+        </StyledLinkButton>
       </StyledButtonContainer>
       <StyledDiver>
         <HorizontalLine />
@@ -54,7 +51,7 @@ export const Login = () => {
   );
 };
 
-const StyledLinkButtons = styled(Button)`
+const StyledLinkButton = styled(Button)`
   width: 192px;
   height: 48px;
 
