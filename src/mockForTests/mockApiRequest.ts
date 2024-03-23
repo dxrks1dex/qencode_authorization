@@ -19,9 +19,7 @@ export async function mockApiRequest(
       const body = JSON.parse(data.body);
 
       const user = findUserByCredentials({
-        //body
-        email: body.email,
-        password: body.password,
+        body,
       });
 
       if (!user) {
