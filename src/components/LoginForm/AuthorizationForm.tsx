@@ -46,6 +46,7 @@ export const AuthorizationForm = () => {
     <div>
       <StyledForm onSubmit={(e: SyntheticEvent) => onFormSubmit(e)}>
         <FormInput
+          value={email}
           type="email"
           id="email"
           name="email"
@@ -58,6 +59,7 @@ export const AuthorizationForm = () => {
           <>
             <InputContainer>
               <FormInput
+                value={password}
                 type={showPassword ? "text" : "password"}
                 id="password"
                 name="password"
