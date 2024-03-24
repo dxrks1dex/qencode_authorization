@@ -13,9 +13,10 @@ import {
 import { Dispatch, SetStateAction, SyntheticEvent, useState } from "react";
 import styled from "styled-components";
 import { useRouter, useSearchParams } from "next/navigation";
-import { onChangePassword } from "@/utilits/onChangePasswordFormSubmit";
+import { onChangePassword } from "@/utils/submitChangePasswordForm";
 import { EyeIcon } from "../../../../img/EyeIcon";
-import { useAuthenticatorContext } from "@/hooks/AuthenticatorContext";
+import { useAuthenticatorContext } from "@/context/AuthenticatorContext";
+import { size } from "@/components/styled/sizes";
 
 interface onShowPasswordProps {
   field: "newPassword" | "confirmNewPassword";
@@ -63,7 +64,7 @@ const ConfirmNewPassword = () => {
     <div>
       <SubTitle>Create new Password?</SubTitle>
       <StyledForm onSubmit={(e) => onFormSubmit(e)}>
-        <div>
+        <StyledNewPasswordSection>
           <StyledInputName>Password</StyledInputName>
           <InputContainer>
             <FormInput
@@ -83,8 +84,8 @@ const ConfirmNewPassword = () => {
               <EyeIcon />
             </IconContainer>
           </InputContainer>
-        </div>
-        <div>
+        </StyledNewPasswordSection>
+        <StyledNewPasswordSection>
           <StyledInputName>Confirm Password</StyledInputName>
           <InputContainer>
             <FormInput
@@ -106,7 +107,7 @@ const ConfirmNewPassword = () => {
               <EyeIcon />
             </IconContainer>
           </InputContainer>
-        </div>
+        </StyledNewPasswordSection>
         {errorMessage === "" ? null : (
           <ErrorMessage>{errorMessage}</ErrorMessage>
         )}
@@ -128,4 +129,16 @@ const StyledInputName = styled.span`
   line-height: 21px;
   letter-spacing: -0.0024em;
   text-align: left;
+
+  @media (max-width: ${size.mobile}) {
+    margin-left: 10%;
+  }
+`;
+
+const StyledNewPasswordSection = styled.section`
+  @media (max-width: ${size.mobile}) {
+    width: 100%;
+
+    margin-left: -10%;
+  }
 `;

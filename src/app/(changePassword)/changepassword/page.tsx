@@ -10,13 +10,14 @@ import {
   SuccessMessage,
 } from "@/components/styled/styled-components";
 import styled from "styled-components";
-import { useAuthenticatorContext } from "@/hooks/AuthenticatorContext";
-import { resetPassword } from "@/utilits/authorizationOptions";
+import { useAuthenticatorContext } from "@/context/AuthenticatorContext";
 import { SyntheticEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+import { size } from "@/components/styled/sizes";
+import { resetPassword } from "@/api/resetPassword";
 
 const ChangePasswordForm = () => {
-  const [onEmailSend, setOnEmailSend] = useState(false);
+  const [isEmailSent, setIsEmailSent] = useState(false);
 
   const router = useRouter();
 
@@ -32,7 +33,7 @@ const ChangePasswordForm = () => {
       setIsLoading,
       email,
       setErrorMessage,
-      setOnEmailSend,
+      setIsEmailSent,
     });
   };
 
@@ -58,6 +59,7 @@ const ChangePasswordForm = () => {
           type="email"
           id="email"
           name="email"
+          value={email}
           required
           placeholder="Enter your email"
           onChange={(e) => setEmail(e.target.value)}
@@ -65,7 +67,7 @@ const ChangePasswordForm = () => {
         {errorMessage === "" ? null : (
           <ErrorMessage>{errorMessage}</ErrorMessage>
         )}
-        {onEmailSend && (
+        {isEmailSent && (
           <SuccessMessage>
             Check email and follow the link in message
           </SuccessMessage>
@@ -88,4 +90,10 @@ const StyledCancelButton = styled(Button)`
   height: 48px;
 
   margin-top: 30px;
+
+  @media (max-width: ${size.mobile}) {
+    width: 91%;
+
+    margin-left: 5%;
+  }
 `;

@@ -1,6 +1,6 @@
 import { Dispatch, FormEvent, SetStateAction } from "react";
-import { changePassword } from "@/utilits/authorizationOptions";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { changePassword } from "@/api/changePassword";
 
 interface Props {
   e: FormEvent;

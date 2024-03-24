@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { authorizationOptions } from "@/utilits/authorizationOptions";
+import { login } from "@/api/login";
 
 interface Props {
   password: string;
@@ -20,5 +20,5 @@ export const onAuthorizationFormSubmit = ({
   }
 
   setErrorMessage("");
-  authorizationOptions({ email, password, setErrorMessage, setIsLoading });
+  login({ email, password, setErrorMessage, setIsLoading });
 };

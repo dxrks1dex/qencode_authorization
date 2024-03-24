@@ -1,12 +1,10 @@
 import styled from "styled-components";
 import Link from "next/link";
+import { size } from "@/components/styled/sizes";
 
 export const FormInput = styled.input`
   width: 376px;
   height: 48px;
-
-  top: 494px;
-  left: 556px;
 
   padding: 0 12px 0 12px;
 
@@ -25,6 +23,10 @@ export const FormInput = styled.input`
     border: 1px solid #316fea;
     box-shadow: 0 0 2px 1px #537cc5;
   }
+
+  @media (max-width: ${size.mobile}) {
+    width: 85%;
+  }
 `;
 
 export const StyledForm = styled.form`
@@ -36,6 +38,12 @@ export const StyledForm = styled.form`
   display: grid;
 
   grid-gap: 30px;
+
+  @media (max-width: ${size.mobile}) {
+    place-items: center;
+
+    margin-top: 0;
+  }
 `;
 
 export const ApplyButton = styled.button`
@@ -59,6 +67,10 @@ export const ApplyButton = styled.button`
   text-align: center;
 
   cursor: pointer;
+
+  @media (max-width: ${size.mobile}) {
+    width: 91%;
+  }
 `;
 
 export const SubTitle = styled.h3`
@@ -80,7 +92,6 @@ export const StyledLink = styled(Link)`
   font-size: 16px;
   font-weight: 500;
   line-height: 20px;
-  text-align: right;
 
   text-decoration: none;
 `;
@@ -111,6 +122,11 @@ export const InputContainer = styled.div`
   display: flex;
 
   align-items: center;
+
+  @media (max-width: ${size.mobile}) {
+    width: 100%;
+    margin-left: 10%;
+  }
 `;
 
 export const IconContainer = styled.div`
@@ -124,6 +140,10 @@ export const IconContainer = styled.div`
   justify-content: center;
 
   cursor: pointer;
+
+  @media (max-width: ${size.mobile}) {
+    margin-left: 84%;
+  }
 `;
 
 export const ErrorMessage = styled.div`

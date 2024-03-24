@@ -3,7 +3,8 @@ import { Inter } from "next/font/google";
 import Providers from "@/components/Providers";
 import StyledComponentsRegistry from "../lib/registry";
 import styled from "styled-components";
-import { AuthenticatorContextWrapper } from "@/hooks/AuthenticatorContext";
+import { AuthenticatorContextWrapper } from "@/context/AuthenticatorContext";
+import { size } from "@/components/styled/sizes";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -33,9 +34,6 @@ export default function RootLayout({
 const StyledContainer = styled.div`
   position: absolute;
 
-  top: 180px;
-  left: 556px;
-
   display: flex;
   flex-direction: column;
 
@@ -45,6 +43,17 @@ const StyledContainer = styled.div`
   width: 400px;
 
   cursor: default;
+
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+
+  @media (max-width: ${size.mobile}) {
+    left: 0;
+
+    transform: translate(0%, -50%);
+  }
 `;
 
 const StyledTitle = styled.h1`

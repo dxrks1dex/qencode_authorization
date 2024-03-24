@@ -1,6 +1,6 @@
 import { ChangeEvent, SyntheticEvent, useState } from "react";
-import { onAuthorizationFormSubmit } from "@/utilits/onAuthorizationFormSubmit";
-import { useAuthenticatorContext } from "@/hooks/AuthenticatorContext";
+import { onAuthorizationFormSubmit } from "@/utils/onAuthorizationFormSubmit";
+import { useAuthenticatorContext } from "@/context/AuthenticatorContext";
 import {
   StyledForm,
   FormInput,
@@ -13,8 +13,9 @@ import {
 } from "@/components/styled/styled-components";
 import { EyeIcon } from "../../../img/EyeIcon";
 import styled from "styled-components";
+import { size } from "@/components/styled/sizes";
 
-export const AuthorizationForm = () => {
+export const LoginForm = () => {
   const [showPasswordInput, setShowPasswordInput] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -97,4 +98,8 @@ const StyledLinkContainer = styled.div`
   display: flex;
   justify-content: space-between;
   flex-direction: row-reverse;
+
+  @media (max-width: ${size.mobile}) {
+    flex-direction: column;
+  }
 `;

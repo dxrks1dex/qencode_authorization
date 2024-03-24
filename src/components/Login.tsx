@@ -1,5 +1,5 @@
 "use client";
-import { AuthorizationForm } from "@/components/LoginForm/AuthorizationForm";
+import { LoginForm } from "@/components/LoginForm/LoginForm";
 import {
   Button,
   StyledLink,
@@ -10,6 +10,7 @@ import googleLogo from "../../img/google.svg";
 import github from "../../img/github.svg";
 import styled from "styled-components";
 import Image from "next/image";
+import { size } from "@/components/styled/sizes";
 
 export const Login = () => {
   const { data: session } = useSession();
@@ -42,7 +43,7 @@ export const Login = () => {
         or
         <HorizontalLine />
       </StyledDiver>
-      <AuthorizationForm />
+      <LoginForm />
       <StyledText>
         Is your company new to Qencode?
         <StyledLink href={"https://cloud.qencode.com/"}> Sign up</StyledLink>
@@ -56,6 +57,12 @@ const StyledLinkButton = styled(Button)`
   height: 48px;
 
   font-weight: 550;
+
+  @media (max-width: ${size.mobile}) {
+    width: 91%;
+
+    height: 48px;
+  }
 `;
 
 const StyledButtonContainer = styled.section`
@@ -69,6 +76,15 @@ const StyledButtonContainer = styled.section`
   border-radius: 6px;
 
   margin-bottom: 30px;
+
+  @media (max-width: ${size.mobile}) {
+    flex-direction: column;
+
+    align-items: center;
+
+    width: 100%;
+    height: 106px;
+  }
 `;
 
 const StyledIcon = styled(Image)`
@@ -90,12 +106,17 @@ const StyledDiver = styled.div`
 
   width: 400px;
   height: 16px;
-  top: 448px;
-  left: 556px;
+
   border: 1px;
 
   cursor: default;
   user-select: none;
+
+  @media (max-width: ${size.mobile}) {
+    width: 90%;
+    margin-left: 5%;
+    margin-bottom: 7.5%;
+  }
 `;
 
 const HorizontalLine = styled.div`
@@ -111,6 +132,10 @@ const HorizontalLine = styled.div`
   line-height: 16px;
   letter-spacing: 0px;
   text-align: left;
+
+  @media (max-width: ${size.mobile}) {
+    width: 40%;
+  }
 `;
 
 const StyledText = styled.div`
